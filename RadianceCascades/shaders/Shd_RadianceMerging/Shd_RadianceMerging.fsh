@@ -43,7 +43,8 @@ void main() {
 	
 	vec4 radiance = texture2D(gm_BaseTexture, in_TextCoord);
 	radiance.a = 1.0 - radiance.a;
-	
+
+	// Check ray visibility term from raymarching, on hit merge, otherwise no merge:
 	if (radiance.a != 0.0 && in_CascadeIndex < in_CascadeCount - 1.0) {
 		vec4 TL = vec4(0.0), TR = vec4(0.0),
 			BL = vec4(0.0), BR = vec4(0.0);
