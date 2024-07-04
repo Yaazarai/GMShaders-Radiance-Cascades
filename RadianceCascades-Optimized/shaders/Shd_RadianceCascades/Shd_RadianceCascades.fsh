@@ -13,12 +13,7 @@ uniform float in_CascadeInterval;
 #define V2F16(v) ((v.y * float(0.0039215689)) + v.x)
 #define F16V2(f) vec2(floor(f * 255.0) * float(0.0039215689), fract(f * 255.0))
 
-struct probe_info {
-	float angular;
-	vec2 linear, size, probe;
-	float index, offset, range, scale;
-};
-
+struct probe_info { float angular; vec2 linear, size, probe; float index, offset, range, scale; };
 probe_info cascadeTexelInfo(vec2 coord) {
 	float angular = pow(2.0, in_CascadeIndex);                                              // Ray Count.
 	vec2 linear = vec2(in_CascadeLinear * pow(2.0, in_CascadeIndex));                       // Cascade Probe Spacing.
@@ -28,6 +23,7 @@ probe_info cascadeTexelInfo(vec2 coord) {
 	float index = raypos.x + (angular * raypos.y);                                          // PreAvg Index (actual = index * 4).
 	float offset = (in_CascadeInterval  * (1.0 - pow(4.0, in_CascadeIndex))) / (1.0 - 4.0); // Offset of Ray Interval (geometric sum).
 	float range = in_CascadeInterval * pow(4.0, in_CascadeIndex);                           // Length of Ray Interval (geometric sum).
+		range += length(vec2(in_CascadeLinear * pow(2.0, in_CascadeIndex+1.0)));            //	* light Leak Fix.
 	float scale = length(in_RenderExtent);                                                  // Diagonal of Render Extent (for SDF scaling).
 	return probe_info(angular * angular, linear, size, probe, index, offset, range, scale); // Output probe information struct.
 }
