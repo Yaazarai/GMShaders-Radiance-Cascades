@@ -7,7 +7,7 @@
 
 // Should be pow2 sizes only (either whole or fractional: 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, etc.).
 // Increasing linear spacing will reduce quality, decreasing linear spacing will increase quality.
-render_linear = 2.0;
+render_linear = 1.0;
 
 // Should be equal to linear resolution.
 // Set to a large distance for debugging (should see individually cascaded rays in scene).
@@ -91,11 +91,14 @@ radiance_u_distancefield_uRenderExtent = uniform(radiance_u_distancefield, "in_R
 		
 		Instead we can store rays direction first, so that each "block," represents
 		one ray direction and each pixel within that block represents a ray that is
-		cast in that direction from each probe in the scene.
+		cast from a probe in that direction.
 		
 		This direction first approach allows us to utilize hardware interpolation
-		between probes, since we interpolate between adjacent probes when merging.
+		between probes, since we interpolate between adjacent N+1 probes when merging.
 		
 		NOTE: That direction first + pre-averaging means that each ray actually
 		represents 4 rays and each direction actually represents 4 directions.
+		
+		This combined result uses 75% less memory and 75% less merge samples and also
+		benefits from texture cache localization and hardware interpolation.
 */

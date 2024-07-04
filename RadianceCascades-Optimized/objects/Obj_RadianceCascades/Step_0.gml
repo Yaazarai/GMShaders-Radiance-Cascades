@@ -18,4 +18,4 @@ cascade_index += keyboard_check_pressed(vk_right) - keyboard_check_pressed(vk_le
 cascade_index = clamp(cascade_index, 0, radiance_cascades);
 
 radiance_interval += keyboard_check(vk_up) - keyboard_check(vk_down);
-radiance_interval = clamp(radiance_interval, render_linear, 128);
+radiance_interval = clamp(radiance_interval, render_linear * 2.0, 128);
