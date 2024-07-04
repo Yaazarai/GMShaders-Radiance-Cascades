@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"Shd_DistanceField",
+  "name":"Shd_DistanceField",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}
