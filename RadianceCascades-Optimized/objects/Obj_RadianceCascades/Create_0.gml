@@ -5,6 +5,8 @@
 	contains the final displayable output radiance.
 */
 
+game_set_speed(60, gamespeed_fps);
+
 // Should be pow2 sizes only (either whole or fractional: 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, etc.).
 // Increasing linear spacing will reduce quality, decreasing linear spacing will increase quality.
 render_linear = 1.0;
