@@ -9,9 +9,9 @@
 // Increasing linear spacing will reduce quality, decreasing linear spacing will increase quality.
 render_linear = 1.0;
 
-// Should be equal to linear resolution.
+// Should be equal to diagonal of the square of linear resolution.
 // Set to a large distance for debugging (should see individually cascaded rays in scene).
-render_interval = 64;
+render_interval = point_distance(0.0, 0.0, render_linear, render_linear);
 
 render_width = 1920;
 render_height = 1080;
