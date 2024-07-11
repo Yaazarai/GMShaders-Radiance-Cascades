@@ -1,5 +1,5 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"Animation Curves","order":12,"path":"folders/Animation Curves.yy",},
     {"name":"Extensions","order":14,"path":"folders/Extensions.yy",},
     {"name":"Fonts","order":7,"path":"folders/Fonts.yy",},
@@ -16,5 +16,8 @@
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
-  "ResourceOrderSettings": [],
+  "ResourceOrderSettings":[
+    {"name":"Obj_SampleObjectDF","order":1,"path":"objects/Obj_SampleObjectDF/Obj_SampleObjectDF.yy",},
+    {"name":"Shd_CascadeVisualDF","order":1,"path":"shaders/Shd_CascadeVisualDF/Shd_CascadeVisualDF.yy",},
+  ],
 }

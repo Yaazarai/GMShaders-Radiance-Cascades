@@ -13,7 +13,7 @@ render_linear = 1.0;
 
 // Should be equal to diagonal of the square of linear resolution.
 // Set to a large distance for debugging (should see individually cascaded rays in scene).
-render_interval = point_distance(0.0, 0.0, render_linear, render_linear);
+render_interval = point_distance(0.0, 0.0, render_linear, render_linear) * 0.5;
 
 render_width = 1920;
 render_height = 1080;
@@ -43,8 +43,8 @@ radiance_renderlist = ds_list_create();
 radiance_world = surface_build(render_width, render_height, surface_rgba8unorm, radiance_renderlist); // Intput game/world scene to process.
 radiance_jfa = surface_build(render_width, render_height, surface_rgba8unorm, radiance_renderlist); // Intput game/world scene to process.
 radiance_sdf = surface_build(render_width, render_height, surface_rgba8unorm, radiance_renderlist); // Intput game/world scene to process.
-radiance_current = surface_build(radiance_width, radiance_height, surface_rgba8unorm, radiance_renderlist); // Fetch texture for current cascade.
-radiance_previous = surface_build(radiance_width, radiance_height, surface_rgba8unorm, radiance_renderlist); // Fetch texture for previous cascade.
+radiance_current = surface_build(radiance_width, radiance_height, surface_rgba16float, radiance_renderlist); // Fetch texture for current cascade.
+radiance_previous = surface_build(radiance_width, radiance_height, surface_rgba16float, radiance_renderlist); // Fetch texture for previous cascade.
 
 // Shader uniform inputs for Intervals and Merging combined into a single shader.
 radiance_u_cascades = Shd_RadianceCascades;

@@ -1,8 +1,7 @@
 gpu_set_blendenable(false);
-shader_set(Shd_CascadeVisual);
-shader_set_uniform_f(shader_get_uniform(Shd_CascadeVisual, "in_CascadeSize"), cascade_size);
-shader_set_uniform_f(shader_get_uniform(Shd_CascadeVisual, "in_CascadeIndex"), cascadeIndex);
-shader_set_uniform_f(shader_get_uniform(Shd_CascadeVisual, "in_CascadeAngular"), angular);
+shader_set(Shd_CascadeVisualDF);
+shader_set_uniform_f(shader_get_uniform(Shd_CascadeVisualDF, "in_CascadeSize"), cascade_size);
+shader_set_uniform_f(shader_get_uniform(Shd_CascadeVisualDF, "in_CascadeIndex"), cascadeIndex);
 
 surface_set_target(render_surface);
 var sprw = sprite_get_width(Spr_SampleSprite);
@@ -24,8 +23,10 @@ draw_set_halign(fa_center);
 draw_text(cascade_offsetx + render_size, cascade_offsety + render_size + 16,
 	"Controls: [Up]/[Down] Probe Spacing; [Left]/[Right] Cascade Index");
 draw_text(cascade_offsetx + render_size, cascade_offsety + render_size + 40,
-	"[Space] to switch to Direction-First Probe Layout");
-
+	"[Space] to switch to Position-First Probe Layout");
+draw_text(cascade_offsetx + render_size, cascade_offsety + render_size + 64,
+	"[Right-Click] change ray direction with mouse");
+	
 draw_set_color(c_red);
 draw_rectangle(cascade_offsetx2, cascade_offsety2, cascade_offsetx2 + render_size - 1, cascade_offsety2 + render_size - 1, true);
 
@@ -45,15 +46,24 @@ draw_rectangle(cascade_offsetx2 + current_probex,
 
 draw_set_color(c_aqua);
 
-for(var r = 0; r < current_angular; r++) {
+var mrindex = floor((track_moused / 360.0) * (current_angular * 4));
+
+for(var r = 0; r < (current_angular * 4); r++) {
 	var dx1, dy1, dx2, dy2, dt, intrs, intr;
 	intrs = current_intervalstart * (render_size / cascade_size);
 	intr = current_interval * (render_size / cascade_size);
-	dt = ((r + 0.5) / current_angular) * 2.0 * pi;
+	dt = ((r + 0.5) / (current_angular * 4)) * 2.0 * pi;
 	dx1 = lengthdir_x(intrs, radtodeg(dt));
 	dy1 = lengthdir_y(intrs, radtodeg(dt));
 	dx2 = lengthdir_x(intrs + intr, radtodeg(dt));
 	dy2 = lengthdir_y(intrs + intr, radtodeg(dt));
+	
+	if (floor(r / 4) == floor(mrindex / 4)) {
+		draw_set_color(c_yellow);
+	} else {
+		draw_set_color(c_aqua);
+	}
+	
 	draw_line(
 		cascade_offsetx2 + current_probex + (current_probesize * 0.5) + dx1,
 		cascade_offsety2 + current_probey + (current_probesize * 0.5) + dy1,
@@ -63,21 +73,24 @@ for(var r = 0; r < current_angular; r++) {
 
 draw_set_color(c_fuchsia);
 
-var mrindex = floor((point_direction(
-	cascade_offsetx2 + current_probex + (current_probesize * 0.5),
-	cascade_offsety2 + current_probey + (current_probesize * 0.5),
-	mouse_x, mouse_y) / 360.0) * current_angular);
 var dx, dy, dr;
 var croffset = (render_size / cascade_size) * 0.5;
-dr = ((mrindex + 0.5) / current_angular) * 2.0 * pi;
+dr = ((mrindex + 0.5) / (current_angular  * 4)) * 2.0 * pi;
 dx = lengthdir_x(intrs + intr, radtodeg(dr));
 dy = lengthdir_y(intrs + intr, radtodeg(dr));
 draw_circle(cascade_offsetx2 + current_probex + (current_probesize * 0.5) + dx,
 	cascade_offsety2 + current_probey + (current_probesize * 0.5) + dy, croffset, false);
 
-var rayx = mrindex mod sqrt(current_angular) * (render_size / cascade_size);
-var rayy = floor(mrindex / sqrt(current_angular)) * (render_size / cascade_size);
-draw_circle(cascade_offsetx + current_probex + croffset + rayx,
-	cascade_offsety + current_probey + croffset + rayy, croffset, false);
+var angular_offsetx, angular_offsety, dfirst_offsetx, dfirst_offsety;
+angular_offsetx = floor((mrindex / 4.0) % sqrt(current_angular)) * current_sectorsize;
+angular_offsety = floor((mrindex / 4.0) / sqrt(current_angular)) * current_sectorsize;
+show_debug_message(string(floor(mrindex / 4.0)) + " : " + string(angular_offsetx) + " : " + string(angular_offsety))
+dfirst_offsetx = (current_sectorsize * (current_probex / render_size)) + (croffset * 0.5) + angular_offsetx;
+dfirst_offsety = (current_sectorsize * (current_probey / render_size)) + (croffset * 0.5) + angular_offsety;
+
+draw_circle(cascade_offsetx + dfirst_offsetx, cascade_offsety + dfirst_offsety, croffset, false);
+//var rayx = mrindex mod sqrt(current_angular / 4.0) * (render_size / cascade_size);
+//var rayy = floor(mrindex / sqrt(current_angular / 4.0)) * (render_size / cascade_size);
+//draw_circle(cascade_offsetx + current_probex + croffset + rayx, cascade_offsety + current_probey + croffset + rayy, croffset, false);
 
 draw_set_color(c_white);

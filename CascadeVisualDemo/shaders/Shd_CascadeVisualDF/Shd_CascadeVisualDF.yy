@@ -1,7 +1,7 @@
 {
   "$GMShader":"",
-  "%Name":"Shd_CascadeVisual",
-  "name":"Shd_CascadeVisual",
+  "%Name":"Shd_CascadeVisualDF",
+  "name":"Shd_CascadeVisualDF",
   "parent":{
     "name":"Shaders",
     "path":"folders/Shaders.yy",
