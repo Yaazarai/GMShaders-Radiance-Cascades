@@ -62,9 +62,9 @@ vec4 merge(vec4 rinfo, float index, probe_info pinfo) {
 	float angularN1 = pow(2.0, in_CascadeIndex + 1.0);										// Angular resolution of cascade N+1 for probe lookups.
 	vec2 sizeN1 = pinfo.size * 0.5;															// Size of probe group of cascade N+1 (N+1 has 1/4 total probe count or 1/2 each x,y axis).
 	vec2 probeN1 = vec2(mod(index, angularN1), floor(index / angularN1)) * sizeN1;			// Get the probe group correlated to the ray index passed of the current cascade ray we're merging with.
-	vec2 interpUVN1 = pinfo.probe * 0.5;													// Interpolated probe position in cascade N+1 (layouts match but with 1/2 count, probe falls into its interpolated position by default).
+	vec2 interpUVN1 = (pinfo.probe * 0.5) + 0.25;											// Interpolated probe position in cascade N+1 (layouts match but with 1/2 count, probe falls into its interpolated position by default).
 	vec2 clampedUVN1 = max(vec2(1.0), min(interpUVN1, sizeN1 - 1.0));						// Clamp interpolated probe position away from edge to avoid hardware inteprolation affecting merge lookups from adjacet probe groups.
-	vec2 probeUVN1 = probeN1 + clampedUVN1 + 0.25;											// Final lookup cascade position of the interpolated merge lookup.
+	vec2 probeUVN1 = probeN1 + clampedUVN1;													// Final lookup cascade position of the interpolated merge lookup.
 	vec4 interpolated = texture2D(gm_BaseTexture, probeUVN1 * (1.0 / in_CascadeExtent));	// Texture lookup of the merge sample.
 	return rinfo + interpolated;															// Return original radiance input and merge with lookup sample.
 }
