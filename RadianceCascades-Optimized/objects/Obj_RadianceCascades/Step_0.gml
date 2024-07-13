@@ -16,5 +16,5 @@ surface_update(radiance_previous, radiance_width, radiance_height, -1);
 cascade_index += keyboard_check_pressed(vk_right) - keyboard_check_pressed(vk_left);
 cascade_index = clamp(cascade_index, 0, radiance_cascades);
 
-radiance_interval += keyboard_check(vk_up) - keyboard_check(vk_down);
+radiance_interval += (keyboard_check(vk_up) - keyboard_check(vk_down)) * 0.125;
 radiance_interval = clamp(radiance_interval, point_distance(0.0, 0.0, render_linear, render_linear), 128);

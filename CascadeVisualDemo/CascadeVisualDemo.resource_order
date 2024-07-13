@@ -17,7 +17,10 @@
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
   ],
   "ResourceOrderSettings":[
+    {"name":"Obj_MergingSample","order":2,"path":"objects/Obj_MergingSample/Obj_MergingSample.yy",},
     {"name":"Obj_SampleObjectDF","order":1,"path":"objects/Obj_SampleObjectDF/Obj_SampleObjectDF.yy",},
+    {"name":"Obj_SampleScaling","order":3,"path":"objects/Obj_SampleScaling/Obj_SampleScaling.yy",},
+    {"name":"Shd_Bilinear","order":2,"path":"shaders/Shd_Bilinear/Shd_Bilinear.yy",},
     {"name":"Shd_CascadeVisualDF","order":1,"path":"shaders/Shd_CascadeVisualDF/Shd_CascadeVisualDF.yy",},
   ],
 }

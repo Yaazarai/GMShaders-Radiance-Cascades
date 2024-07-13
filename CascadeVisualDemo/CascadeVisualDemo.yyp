@@ -35,9 +35,12 @@
   "name":"CascadeVisualDemo",
   "resources":[
     {"id":{"name":"Fnt_Sample","path":"fonts/Fnt_Sample/Fnt_Sample.yy",},},
+    {"id":{"name":"Obj_MergingSample","path":"objects/Obj_MergingSample/Obj_MergingSample.yy",},},
     {"id":{"name":"Obj_SampleObject","path":"objects/Obj_SampleObject/Obj_SampleObject.yy",},},
     {"id":{"name":"Obj_SampleObjectDF","path":"objects/Obj_SampleObjectDF/Obj_SampleObjectDF.yy",},},
+    {"id":{"name":"Obj_SampleScaling","path":"objects/Obj_SampleScaling/Obj_SampleScaling.yy",},},
     {"id":{"name":"Rm_SampleRoom","path":"rooms/Rm_SampleRoom/Rm_SampleRoom.yy",},},
+    {"id":{"name":"Shd_Bilinear","path":"shaders/Shd_Bilinear/Shd_Bilinear.yy",},},
     {"id":{"name":"Shd_CascadeVisual","path":"shaders/Shd_CascadeVisual/Shd_CascadeVisual.yy",},},
     {"id":{"name":"Shd_CascadeVisualDF","path":"shaders/Shd_CascadeVisualDF/Shd_CascadeVisualDF.yy",},},
     {"id":{"name":"Spr_SampleSprite","path":"sprites/Spr_SampleSprite/Spr_SampleSprite.yy",},},

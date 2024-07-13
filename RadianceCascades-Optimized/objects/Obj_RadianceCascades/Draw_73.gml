@@ -49,5 +49,5 @@ draw_surface_ext(surface_source(radiance_current), 0, 0, xscale, yscale, 0, c_wh
 gpu_set_blendmode(bm_normal);
 
 draw_set_color(c_yellow);
-draw_text(5, 5, "Frame Time: " + string(delta_time / 1000) + " / " + string(1000 * (1/60.0)));
+draw_text(5, 5, "Frame Time: " + string(delta_time / 1000) + " / " + string(1000 * (1.0/game_get_speed(gamespeed_fps))));
 draw_set_color(c_white);
