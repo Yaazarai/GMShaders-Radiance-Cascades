@@ -47,7 +47,8 @@ radiance_current = surface_build(radiance_width, radiance_height, surface_rgba16
 radiance_previous = surface_build(radiance_width, radiance_height, surface_rgba16float, radiance_renderlist); // Fetch texture for previous cascade.
 
 // Shader uniform inputs for Intervals and Merging combined into a single shader.
-radiance_u_cascades = Shd_RadianceCascades;
+//radiance_u_cascades = Shd_RadianceCascades;
+radiance_u_cascades = Shd_RadianceCascades_FPFixed;
 radiance_u_cascades_RenderScene = texture(radiance_u_cascades, "in_RenderScene");
 radiance_u_cascades_DistanceField = texture(radiance_u_cascades, "in_DistanceField");
 radiance_u_cascades_RenderExtent = uniform(radiance_u_cascades, "in_RenderExtent");

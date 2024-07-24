@@ -9,14 +9,10 @@ uniform float in_CascadeLinear;
 uniform float in_CascadeInterval;
 
 #define TAU 6.283185
-#define EPS 0.000010
+#define EPS 0.00010
 #define V2F16(v) ((v.y * float(0.0039215689)) + v.x)
-#define F16V2(f) vec2(floor(f * 255.0) * float(0.0039215689), fract(f * 255.0))
-#define PI  3.141592
-#define ATAN2(d) ((((atan(d.y, -d.x) / PI) * .5) + .5) * TAU)
 
 struct probe_info { float angular; vec2 linear, size, probe; float index, offset, range, scale; };	// Information struct about scene probes within the cascade.
-
 vec3 tosrgb(vec3 color) { return pow(color, vec3(2.2)); }
 
 // Get the direction-first probe information associated with the each probe of the current cascade (in_CascadeIndex).
@@ -46,9 +42,9 @@ vec4 raymarch(vec2 point, float theta, probe_info info) {
 		ray += (delta * df * info.scale * texel);													// Move ray along its direction by SDF distance sample.
 		
 		if (rd >= info.range || floor(ray) != vec2(0.0)) break;										// If ray has reached range or out-of-bounds, return no-hit.
-		//if (df == 0.0 && rd < EPS && in_CascadeIndex != 0.0) return vec4(0.0);					// 2D light only cast light at their surfaces, not their volume.
-		if (df < EPS) return vec4(texture2D(in_RenderScene, ray).rgb, 0.0);							// On-hit return radiance from scene (with visibility term of 0--e.g. no visibility to merge with higher cascades).
-		//if (df < EPS) return vec4(tosrgb(texture2D(in_RenderScene, ray).rgb), 0.0);				// On-hit return radiance from scene (with visibility term of 0--e.g. no visibility to merge with higher cascades).
+		if (df <= EPS && rd <= EPS && in_CascadeIndex != 0.0) return vec4(0.0);						// 2D light only cast light at their surfaces, not their volume.
+		//if (df < EPS) return vec4(texture2D(in_RenderScene, ray).rgb, 0.0);						// On-hit return radiance from scene (with visibility term of 0--e.g. no visibility to merge with higher cascades).
+		if (df <= EPS) return vec4(tosrgb(texture2D(in_RenderScene, ray).rgb), 0.0);				// On-hit return radiance from scene (with visibility term of 0--e.g. no visibility to merge with higher cascades).
 	}
 	
 	return vec4(0.0, 0.0, 0.0, 1.0);																// If no-hit return no radiance (with visibility term of 1--visibility to merge with higher cascades).
@@ -79,12 +75,13 @@ void main() {
 	for(float i = 0.0; i < 4.0; i++) {													// Cast 4 rays, one for each angular index for this pre-averaged ray.
 		float index = preavg_index + float(i),											// Get the actual index for this pre-averaged ray.
 			theta = (index + 0.5) * theta_scalar;										// Get the actual angle (theta) for this pre-averaged ray.
-		vec4 rinfo = raymarch(origin, theta, pinfo);									// Raymarch the current ray at the desired angle (raymarch function handles interval offsets).
-		gl_FragColor += merge(rinfo, index, pinfo) * 0.25;								// Lookup the 4 rays of cascade N+1 in the same direction as this ray, merge and average results.
+		
+		vec4 rinfo = raymarch(origin, theta, pinfo);
+		gl_FragColor += merge(rinfo, index, pinfo) * 0.25;
 	}
 	
-	//if (in_CascadeIndex == 0.0)														// Only for cascade0, apply sRGB conversion.
-	//	gl_FragColor = vec4(pow(gl_FragColor.rgb, vec3(1.0 / 2.2)), 1.0);				// sRGB apporximation.
+	if (in_CascadeIndex == 0.0)															// Only for cascade0, apply sRGB conversion.
+		gl_FragColor = vec4(pow(gl_FragColor.rgb, vec3(1.0 / 2.2)), 1.0);				// sRGB apporximation.
 }
 
 /*
