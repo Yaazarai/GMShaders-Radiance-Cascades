@@ -30,6 +30,16 @@ render_height = 1080;
 radiance_cascades = ceil(logn(4, point_distance(0, 0, render_width, render_height)));
 radiance_linear = power_ofN(render_linear, 2);
 radiance_interval = multiple_ofN(render_interval, 2);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FIXES CASCADE RAY/PROBE TRADE-OFF ERROR RATE FOR NON-POW2 RESOLUTIONS: (very important).
+error_rate = power(2.0, radiance_cascades - 1);
+errorx = ceil(render_width / error_rate);
+errory = ceil(render_height / error_rate);
+render_width = errorx * error_rate;
+render_height = errory * error_rate;
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 radiance_width = floor(render_width / radiance_linear);
 radiance_height = floor(render_height / radiance_linear);
 cascade_index = 0;
@@ -48,7 +58,8 @@ radiance_previous = surface_build(radiance_width, radiance_height, surface_rgba1
 
 // Shader uniform inputs for Intervals and Merging combined into a single shader.
 //radiance_u_cascades = Shd_RadianceCascades;
-radiance_u_cascades = Shd_RadianceCascades_FPFixed;
+//radiance_u_cascades = Shd_RadianceCascades_FPFixed;
+radiance_u_cascades = Shd_RadianceCascades_Final;
 radiance_u_cascades_RenderScene = texture(radiance_u_cascades, "in_RenderScene");
 radiance_u_cascades_DistanceField = texture(radiance_u_cascades, "in_DistanceField");
 radiance_u_cascades_RenderExtent = uniform(radiance_u_cascades, "in_RenderExtent");

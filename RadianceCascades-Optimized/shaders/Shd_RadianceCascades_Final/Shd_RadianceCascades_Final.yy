@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"Shd_RadianceCascades_Final",
+  "name":"Shd_RadianceCascades_Final",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}
