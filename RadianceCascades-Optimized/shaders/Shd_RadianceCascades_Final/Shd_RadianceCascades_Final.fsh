@@ -30,7 +30,7 @@ vec4 merge(vec4 radiance, float index, vec2 extent, vec2 probe) {
 	float angularN1 = pow(2.0, floor(in_CascadeIndex + 1.0));
 	vec2 extentN1 = floor(in_CascadeExtent / angularN1);
 	vec2 interpN1 = vec2(mod(index, angularN1), floor(index / angularN1)) * extentN1;
-	interpN1 += clamp((probe * 0.5) + 0.25, vec2(1.0), extentN1 - 1.0);
+	interpN1 += clamp((probe * 0.5) + 0.25, vec2(0.5), extentN1 - 0.5);
 	return radiance + texture2D(gm_BaseTexture, interpN1 * (1.0 / in_CascadeExtent));
 }
 
