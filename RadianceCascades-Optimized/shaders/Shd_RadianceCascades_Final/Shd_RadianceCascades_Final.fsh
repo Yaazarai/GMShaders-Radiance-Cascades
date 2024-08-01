@@ -14,8 +14,7 @@ uniform float in_CascadeInterval;
 #define LINEAR(c) pow(c.rgb, vec3(1.0 / 2.2))
 
 vec4 raymarch(vec2 origin, vec2 delta, float interval) {
-	float scale = length(in_RenderExtent);
-	for(float ii = 0.0, dd = 0.0, rr = 0.0, ee = 0.0001; ii < interval; ii++) {
+	for(float ii = 0.0, dd = 0.0, rr = 0.0, ee = 0.0001, scale = length(in_RenderExtent); ii < interval; ii++) {
 		vec2 ray = (origin + (delta * rr)) * (1.0 / in_RenderExtent);
 		rr += scale * (dd = V2F16(texture2D(in_DistanceField, ray).rg));
 		if (rr >= interval || floor(ray) != vec2(0.0)) break;
@@ -45,7 +44,8 @@ void main() {
 	vec2 origin = (probe.xy + 0.5) * linear;
 	float angular = sqr_angular * sqr_angular * 4.0;
 	float index = (probe.z + (probe.w * sqr_angular)) * 4.0;
-	
+
+	gl_FragColor = vec4(0.0);
 	for(float i = 0.0; i < 4.0; i++) {
 		float preavg = index + float(i);
 		float theta = (preavg + 0.5) * (TAU / angular);
