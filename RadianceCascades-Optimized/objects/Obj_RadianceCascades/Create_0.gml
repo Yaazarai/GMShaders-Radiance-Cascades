@@ -9,14 +9,14 @@ game_set_speed(60, gamespeed_fps);
 
 // Should be pow2 sizes only (either whole or fractional: 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, etc.).
 // Increasing linear spacing will reduce quality, decreasing linear spacing will increase quality.
-render_linear = 1.0;
+render_linear = 0.5;
 
 // Should be equal to diagonal of the square of linear resolution.
 // Set to a large distance for debugging (should see individually cascaded rays in scene).
 render_interval = point_distance(0.0, 0.0, render_linear, render_linear) * 0.5;
 
-render_width = 1920;
-render_height = 1080;
+render_width = 1250;
+render_height = 900;
 
 // PENDING IMPLEMENTATION:
 // render_skybox = make_color_normalized_rgb(0.2, 0.5, 1.0);
