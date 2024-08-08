@@ -22,7 +22,7 @@ function multiple_ofN(number, n) { return (n == 0) ? number : ceil(number / n) *
 function geometric_ofN(number, n, p) { return (number * (1.0 - power(p, n))) / (1.0 - p); }
 
 // Draw Functions
-function draw_sprite_scalable(spr, xx, yy, w, h) { return draw_sprite_ext(spr, 0, xx, yy, w/sprite_get_width(spr), h/sprite_get_height(spr), 0, c_white, 1); }
+function draw_sprite_scalable(spr, xx, yy, w, h) { draw_sprite_ext(spr, 0, xx, yy, w/sprite_get_width(spr), h/sprite_get_height(spr), 0, c_white, 1); }
 
 // Color Functions
 function make_color_normalized_rgb(red, green, blue) { return make_color_rgb(red * 255.0, green * 255.0, blue * 255.0); }
