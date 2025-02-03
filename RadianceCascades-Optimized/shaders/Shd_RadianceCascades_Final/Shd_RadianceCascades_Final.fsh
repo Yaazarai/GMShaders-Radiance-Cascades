@@ -38,9 +38,14 @@ void main() {
 	float sqr_angular = pow(2.0, floor(in_CascadeIndex));
 	vec2 extent = floor(in_CascadeExtent / sqr_angular);
 	vec4 probe = vec4(mod(coord, extent), floor(coord / extent));
-	float interval = (in_CascadeInterval  * (1.0 - pow(4.0, in_CascadeIndex))) / (1.0 - 4.0);
+	float interval = (1.0 - pow(4.0, in_CascadeIndex)) / (1.0 - 4.0);
+	interval *= in_CascadeInterval;
 	vec2 linear = vec2(in_CascadeLinear * pow(2.0, in_CascadeIndex));
-	float limit = (in_CascadeInterval * pow(4.0, in_CascadeIndex)) + length(linear * 2.0);
+	float limit = (in_CascadeInterval * pow(4.0, in_CascadeIndex));// + length(linear * 2.0);
+	
+	//float interval = 1.0 * pow(4.0, in_CascadeIndex) * sign(in_CascadeIndex);
+	//float limit = 1.0 * pow(4.0, in_CascadeIndex + 1.0);
+	
 	vec2 origin = (probe.xy + 0.5) * linear;
 	float angular = sqr_angular * sqr_angular * 4.0;
 	float index = (probe.z + (probe.w * sqr_angular)) * 4.0;

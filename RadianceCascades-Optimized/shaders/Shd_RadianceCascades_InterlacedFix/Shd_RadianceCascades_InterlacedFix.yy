@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"Shd_RadianceCascades_InterlacedFix",
+  "name":"Shd_RadianceCascades_InterlacedFix",
+  "parent":{
+    "name":"Shaders",
+    "path":"folders/Shaders.yy",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}

@@ -20,8 +20,10 @@
     {"name":"Obj_LineTesting","order":1,"path":"objects/Obj_LineTesting/Obj_LineTesting.yy",},
     {"name":"Shd_DistanceField","order":2,"path":"shaders/Shd_DistanceField/Shd_DistanceField.yy",},
     {"name":"Shd_JumpFlood","order":1,"path":"shaders/Shd_JumpFlood/Shd_JumpFlood.yy",},
-    {"name":"Shd_RadianceCascades_FPFixed","order":4,"path":"shaders/Shd_RadianceCascades_FPFixed/Shd_RadianceCascades_FPFixed.yy",},
     {"name":"Shd_RadianceCascades_Final","order":5,"path":"shaders/Shd_RadianceCascades_Final/Shd_RadianceCascades_Final.yy",},
+    {"name":"Shd_RadianceCascades_FPFixed","order":4,"path":"shaders/Shd_RadianceCascades_FPFixed/Shd_RadianceCascades_FPFixed.yy",},
+    {"name":"Shd_RadianceCascades_InterlacedFix","order":6,"path":"shaders/Shd_RadianceCascades_InterlacedFix/Shd_RadianceCascades_InterlacedFix.yy",},
+    {"name":"Shd_RadianceCascades_BilinearFix","order":7,"path":"shaders/Shd_RadianceCascades_BilinearFix/Shd_RadianceCascades_BilinearFix.yy",},
     {"name":"Shd_SeedJumpFlood","order":3,"path":"shaders/Shd_SeedJumpFlood/Shd_SeedJumpFlood.yy",},
   ],
 }
