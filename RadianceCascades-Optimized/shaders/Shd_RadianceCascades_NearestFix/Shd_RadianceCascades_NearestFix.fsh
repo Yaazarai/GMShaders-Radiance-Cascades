@@ -7,6 +7,7 @@ uniform float in_CascadeCount;
 uniform float in_CascadeIndex;
 uniform float in_CascadeLinear;
 uniform float in_CascadeInterval;
+uniform float in_WorldTime;
 
 #define TAU 6.283185
 #define PI (0.5*TAU)
@@ -35,16 +36,6 @@ vec4 mergeNearestProbe(vec4 radiance, float index, vec2 probe) {
 	return texture2D(gm_BaseTexture, interpN1 * (1.0 / in_CascadeExtent));
 }
 
-void getBilinearProbes(vec2 probe, out vec2 probes[4]) {
-	vec2 probeN1 = floor((probe - 1.0) / 2.0);
-	probes[0] = probeN1 + vec2(0.0, 0.0);
-	probes[1] = probeN1 + vec2(1.0, 0.0);
-	probes[2] = probeN1 + vec2(0.0, 1.0);
-	probes[3] = probeN1 + vec2(1.0, 1.0);
-}
-
-float ATAN2(float yy, float xx) { return mod(atan(yy, xx), TAU); }
-
 void main() {
 	vec2 coord = floor(in_TexelCoord * in_CascadeExtent);
 	float sqr_angular = pow(2.0, floor(in_CascadeIndex));
@@ -64,12 +55,9 @@ void main() {
 	float index = (probe.z + (probe.w * sqr_angular)) * 4.0;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Bilinear Fix:
-	vec2 bilinearN1[4];
-	getBilinearProbes(probe.xy, bilinearN1);
-	vec2 texelIndexN1 = floor((vec2(probe.xy) - 1.0) / 2.0);
-	vec2 texelIndexN1_N = floor((texelIndexN1 * 2.0) + 1.0);
-	vec2 weight = vec2(0.25) + (vec2(probe.xy) - texelIndexN1_N) * vec2(0.5);
+	// Nearest Neighbor:
+	vec2 probeN1 = floor(probe.xy * 0.5);
+	vec2 originN1 = (probeN1 + 0.5) * linearN1;
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	gl_FragColor = vec4(0.0);
@@ -82,18 +70,10 @@ void main() {
 		vec2 ray_start = origin + (deltaNm1 * interval);
 		
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		/// Bilinear Fix:
-		vec4 samples[4];
-		for(float j = 0.0; j < 4.0; j++) {
-			vec2 originN1 = (bilinearN1[int(j)] + 0.5) * linearN1;
-			vec2 ray_end = originN1 + (delta * (interval + limit));
-			samples[int(j)] = raymarch(ray_start, normalize(ray_end - ray_start), length(ray_end - ray_start));
-			samples[int(j)] = mergeNearestProbe(samples[int(j)], preavg, bilinearN1[int(j)]);
-		}
-		
-		vec4 top = mix(samples[0], samples[1], weight.x);
-		vec4 bot = mix(samples[2], samples[3], weight.x);
-		vec4 rad = mix(top, bot, weight.y);
+		/// Nearest Neighbor:
+		vec2 ray_end = originN1 + (delta * (interval + limit));
+		vec4 rad = raymarch(ray_start, normalize(ray_end - ray_start), length(ray_end - ray_start));
+		rad = mergeNearestProbe(rad, preavg, probeN1);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
 		gl_FragColor += rad * 0.25;
@@ -104,13 +84,12 @@ void main() {
 }
 
 /*
-	Bilinear Fix:
-		This is a reprojection fix which casts 4x as many rays, one ray to the starting position
-		of each set of bilinear rays (merged rays from bilinear probes). This ensures that we
-		continuously and consistently observe radiance projected from each bilinear probe.
+	Nearest-Neighbor Fix:
+		This is a no-interpolation "reprojection fix," where rays are reprojected to point
+		towards the rays of the nearest probe within the higher cascade.
 		
-		Then each ray merges with the rays from its respective bilinear-probe WITHOUT interpolation.
-		Finally radiance is manually interpolated from the reprojected bilinear-rays just like Vanilla RC.
+		We only merge with the nearest cN+1 probe rather than interpolating between rays
+		of each bilinear probe (TL, TR, BL and BR).
 		
 		To fix light leak rays are "forked," starting from 1/4th as many positions to match
 		the angular resolution of the previous cascade for perfectly continuous intervals.

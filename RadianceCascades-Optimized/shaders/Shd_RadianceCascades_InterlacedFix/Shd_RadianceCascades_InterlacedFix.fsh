@@ -103,3 +103,23 @@ void main() {
 	if (in_CascadeIndex < 1.0)
 		gl_FragColor = vec4(LINEAR(gl_FragColor), 1.0);
 }
+
+/*
+	Nearest-Interlaced Fix:
+		Nearest-Interlaced is the same as Nearest-Neighbor, except that we "interlace," the
+		nearest cN+1 probe such that no probe of any 2x2 group of cN probes share the same
+		cN+1 probe. With 1/2 as many cN+1 probes per axis in cN we have one cN+1 probe per
+		2x2 group of cN probes. The goal is to ensure that these 2x2 probe groups cannot
+		share the same cN+1 probe. This produces a form of stylistic dithering while solving
+		ringing and smoothing radiance.
+		
+	Nearest-Neighbor Fix:
+		This is a no-interpolation "reprojection fix," where rays are reprojected to point
+		towards the rays of the nearest-interlaced probe within the higher cascade.
+		
+		We only merge with the nearest-interlaced cN+1 probe rather than interpolating between rays
+		of each bilinear probe (TL, TR, BL and BR).
+		
+		To fix light leak rays are "forked," starting from 1/4th as many positions to match
+		the angular resolution of the previous cascade for perfectly continuous intervals.
+*/
